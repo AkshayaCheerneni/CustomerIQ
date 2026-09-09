@@ -22,10 +22,7 @@ app = FastAPI(
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODEL_DIR = os.path.join(BASE_DIR, "models")
 
-churn_model = joblib.load(
-    os.path.join(MODEL_DIR, "churn_model.joblib")
-)
-
+churn_model = None
 clv_model = joblib.load(
     os.path.join(MODEL_DIR, "clv_model.joblib")
 )
