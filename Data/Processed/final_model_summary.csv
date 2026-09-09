@@ -1,0 +1,3 @@
+Task,Best Model,Main Metric,Score
+Churn Prediction,Logistic Regression,F1 Score,0.0885496183206106
+CLV Prediction,Linear Regression,R2,0.9673710810107288
