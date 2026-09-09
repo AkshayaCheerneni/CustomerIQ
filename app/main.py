@@ -1,16 +1,18 @@
 
-from fastapi import FastAPI, UploadFile, File, HTTPException
-from pydantic import BaseModel
-import pandas as pd
-import numpy as np
-import joblib
 import os
 from io import BytesIO
+from typing import Annotated
+
+import joblib
+import pandas as pd
+from fastapi import FastAPI, File, HTTPException, UploadFile
+from pydantic import BaseModel
 from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
-from sklearn.pipeline import Pipeline
-from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+
 app = FastAPI(
     title="CustomerIQ API",
     description="Customer churn, CLV prediction and segmentation API",
@@ -102,14 +104,14 @@ def home():
 
 
 @app.post("/upload")
-async def upload_data(file: UploadFile = File(...)):
+async def upload_data(file: Annotated[UploadFile, File(...)]):
     global uploaded_data
 
     contents = await file.read()
 
     try:
         uploaded_data = pd.read_csv(BytesIO(contents))
-    except Exception:
+    except (pd.errors.ParserError, UnicodeDecodeError, ValueError):
         raise HTTPException(
             status_code=400,
             detail="Uploaded file must be a valid CSV file."
