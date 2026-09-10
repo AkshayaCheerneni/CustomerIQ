@@ -229,8 +229,8 @@ def train_models():
 
     data_path = os.path.join(
         BASE_DIR,
-        "data",
-        "processed",
+        "Data",
+        "Processed",
         "customerIQ_customer_churn_features.csv"
     )
 
