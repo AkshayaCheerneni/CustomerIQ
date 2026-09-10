@@ -206,16 +206,16 @@ def get_metrics():
         "classification_results": pd.read_csv(
             os.path.join(
                 BASE_DIR,
-                "data",
-                "processed",
+                "Data",
+                "Processed",
                 "classification_results.csv"
             )
         ).to_dict(orient="records"),
         "regression_results": pd.read_csv(
             os.path.join(
                 BASE_DIR,
-                "data",
-                "processed",
+                "Data",
+                "Processed",
                 "regression_results.csv"
             )
         ).to_dict(orient="records")
