@@ -1,4 +1,3 @@
-
 import os
 from io import BytesIO
 from typing import Annotated
@@ -24,14 +23,8 @@ MODEL_DIR = os.path.join(BASE_DIR, "models")
 
 churn_model = None
 clv_model = None
-
-cluster_scaler = joblib.load(
-    os.path.join(MODEL_DIR, "cluster_scaler.joblib")
-)
-
-kmeans_model = joblib.load(
-    os.path.join(MODEL_DIR, "kmeans_model.joblib")
-)
+cluster_scaler = None
+kmeans_model = None
 
 uploaded_data = None
 
@@ -91,6 +84,45 @@ class CustomerInput(BaseModel):
     customer_lifetime_value: float
 
 
+def load_churn_model():
+    global churn_model
+
+    if churn_model is None:
+        churn_model = joblib.load(
+            os.path.join(MODEL_DIR, "churn_model.joblib")
+        )
+
+    return churn_model
+
+
+def load_clv_model():
+    global clv_model
+
+    if clv_model is None:
+        clv_model = joblib.load(
+            os.path.join(MODEL_DIR, "clv_model.joblib")
+        )
+
+    return clv_model
+
+
+def load_cluster_models():
+    global cluster_scaler
+    global kmeans_model
+
+    if cluster_scaler is None:
+        cluster_scaler = joblib.load(
+            os.path.join(MODEL_DIR, "cluster_scaler.joblib")
+        )
+
+    if kmeans_model is None:
+        kmeans_model = joblib.load(
+            os.path.join(MODEL_DIR, "kmeans_model.joblib")
+        )
+
+    return cluster_scaler, kmeans_model
+
+
 @app.get("/")
 def home():
     return {
@@ -121,9 +153,10 @@ async def upload_data(file: Annotated[UploadFile, File(...)]):
 
 @app.post("/predict/churn")
 def predict_churn(customer: CustomerInput):
+    model = load_churn_model()
     data = pd.DataFrame([customer.model_dump()])
 
-    prediction = churn_model.predict(
+    prediction = model.predict(
         data[predictor_features]
     )[0]
 
@@ -135,9 +168,10 @@ def predict_churn(customer: CustomerInput):
 
 @app.post("/predict/clv")
 def predict_clv(customer: CustomerInput):
+    model = load_clv_model()
     data = pd.DataFrame([customer.model_dump()])
 
-    prediction = clv_model.predict(
+    prediction = model.predict(
         data[predictor_features]
     )[0]
 
@@ -148,15 +182,16 @@ def predict_clv(customer: CustomerInput):
 
 @app.post("/segment")
 def segment_customer(customer: CustomerInput):
+    scaler, model = load_cluster_models()
     data = pd.DataFrame([customer.model_dump()])
 
     cluster_data = data[clustering_features]
 
-    scaled_data = cluster_scaler.transform(
+    scaled_data = scaler.transform(
         cluster_data
     )
 
-    cluster = kmeans_model.predict(
+    cluster = model.predict(
         scaled_data
     )[0]
 
@@ -185,6 +220,8 @@ def get_metrics():
             )
         ).to_dict(orient="records")
     }
+
+
 @app.post("/train")
 def train_models():
     global churn_model
@@ -204,26 +241,34 @@ def train_models():
     y_churn = data["churn"]
 
     churn_model = Pipeline(
-    steps=[
-        (
-            "preprocessor",
-            ColumnTransformer(
-                transformers=[
-                    ("num", StandardScaler(), numerical_features),
-                    ("cat", OneHotEncoder(handle_unknown="ignore"), categorical_features)
-                ]
+        steps=[
+            (
+                "preprocessor",
+                ColumnTransformer(
+                    transformers=[
+                        (
+                            "num",
+                            StandardScaler(),
+                            numerical_features
+                        ),
+                        (
+                            "cat",
+                            OneHotEncoder(handle_unknown="ignore"),
+                            categorical_features
+                        )
+                    ]
+                )
+            ),
+            (
+                "model",
+                LogisticRegression(
+                    max_iter=1000,
+                    class_weight="balanced",
+                    random_state=42
+                )
             )
-        ),
-        (
-            "model",
-            LogisticRegression(
-                max_iter=1000,
-                class_weight="balanced",
-                random_state=42
-            )
-        )
-    ]
-)
+        ]
+    )
 
     churn_model.fit(X, y_churn)
 
