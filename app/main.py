@@ -23,9 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODEL_DIR = os.path.join(BASE_DIR, "models")
 
 churn_model = None
-clv_model = joblib.load(
-    os.path.join(MODEL_DIR, "clv_model.joblib")
-)
+clv_model = None
 
 cluster_scaler = joblib.load(
     os.path.join(MODEL_DIR, "cluster_scaler.joblib")
