@@ -60,7 +60,7 @@ The project uses the same customer dataset across the analysis, machine learning
 
 ---
 
-# 1. Customer Churn Prediction
+## 1. Customer Churn Prediction
 
 I tested three classification models:
 
@@ -93,7 +93,7 @@ For this reason, **Logistic Regression is the more useful classification model f
 
 ---
 
-# 2. Customer Lifetime Value Prediction
+## 2. Customer Lifetime Value Prediction
 
 The second part of the project predicts Customer Lifetime Value.
 
@@ -125,7 +125,7 @@ So the current project uses **Linear Regression as the preferred CLV model based
 
 ---
 
-# 3. Customer Segmentation
+## 3. Customer Segmentation
 
 For customer segmentation, I used **K-Means clustering**.
 
@@ -161,7 +161,7 @@ These segments make it easier to think about customers differently instead of tr
 
 ---
 
-# 4. Feature Engineering
+## 4. Feature Engineering
 
 I created additional features from the original customer information to make the data more useful for analysis and machine learning.
 
@@ -177,7 +177,7 @@ These features are used by the machine learning pipeline and help represent cust
 
 ---
 
-# 5. Technology Used
+## 5. Technology Used
 
 ### Python
 
@@ -228,7 +228,7 @@ These features are used by the machine learning pipeline and help represent cust
 
 ---
 
-# 6. Project Structure
+## 6. Project Structure
 
 ```text
 CustomerIQ/
@@ -272,7 +272,7 @@ CustomerIQ/
 
 ---
 
-# 7. FastAPI
+## 7. FastAPI
 
 After completing the machine learning work, I connected the models to a FastAPI application.
 
@@ -292,7 +292,7 @@ The API provides endpoints for uploading data, making predictions, segmentation,
 
 ---
 
-# 8. Running the API
+## 8. Running the API
 
 From the project folder:
 
@@ -314,7 +314,7 @@ Swagger provides an interactive page where each endpoint can be tested without w
 
 ---
 
-# 9. API Testing
+## 9. API Testing
 
 I tested the main endpoints through Swagger.
 
@@ -364,7 +364,7 @@ The `/train` endpoint successfully retrains the churn and CLV models and saves t
 
 ---
 
-# 10. Saved Models
+## 10. Saved Models
 
 The trained models are stored using Joblib:
 
@@ -380,7 +380,7 @@ The FastAPI application loads these models when predictions are requested.
 
 ---
 
-# 11. Dashboard
+## 11. Dashboard
 
 I created a dashboard notebook to bring the model results and customer segments together.
 
@@ -398,7 +398,7 @@ The dashboard makes the model results easier to understand without looking direc
 
 ---
 
-# 12. Business Insights
+## 12. Business Insights
 
 ### Highest-Value Customers
 
@@ -426,7 +426,7 @@ Linear Regression produced the lowest MAE and RMSE and the highest R² score amo
 
 ---
 
-# 13. Testing
+## 13. Testing
 
 I added automated tests for the FastAPI application using Pytest.
 
@@ -442,7 +442,7 @@ Ruff also completed successfully with no linting errors.
 
 ---
 
-# 14. GitHub Actions
+## 14. GitHub Actions
 
 The project includes a GitHub Actions workflow that runs automatically when changes are pushed to the `main` branch.
 
@@ -466,12 +466,12 @@ This makes sure that changes to the project are checked automatically instead of
 
 ---
 
-# 15. How to Run the Project
+## 15. How to Run the Project
 
 ### Clone the repository
 
 ```bash
-git clone <https://github.com/AkshayaCheerneni/CustomerIQ.git>
+git clone https://github.com/AkshayaCheerneni/CustomerIQ.git
 ```
 
 ### Open the project
@@ -526,7 +526,7 @@ http://127.0.0.1:8000/docs
 
 ---
 
-# 16. Limitations
+## 16. Limitations
 
 There are a few limitations in the current version of the project:
 
@@ -539,7 +539,7 @@ There are a few limitations in the current version of the project:
 
 ---
 
-# Project Summary
+## Project Summary
 
 CustomerIQ started as a customer dataset and was developed into a complete machine learning application.
 
